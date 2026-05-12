@@ -20,47 +20,85 @@ body.admin-theme {
     flex-direction: column;
 }
 
-/* Header */
+/* Header Branding Premium */
 .main-header {
     background: transparent;
-    padding: 60px 20px 20px;
-    text-align: center;
+    padding: 50px 20px 10px;
     width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    position: relative;
+    z-index: 10;
 }
 
-.brand {
+.brand-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    pointer-events: none;
+}
+
+.brand-logo img {
+    height: 65px;
+    width: auto;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    object-fit: cover;
+    display: block;
+}
+
+.brand-divider {
+    width: 1px;
+    height: 50px;
+    background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.2), transparent);
+}
+
+.brand-text {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    gap: 10px;
-    pointer-events: none; /* Para que no bloquee clics */
+    justify-content: center;
+    align-items: flex-start;
 }
 
-.brand .logo-placeholder {
-    background: white;
-    padding: 10px 20px;
-    border-radius: 8px;
-    margin-bottom: 10px;
-}
-
-.brand h1 {
-    font-family: 'Outfit';
-    font-size: 36px;
-    margin: 0;
-    letter-spacing: -1px;
-}
-
-.brand h1 span {
-    color: var(--primary);
-    font-weight: 400;
-}
-
-.brand .subtitle {
-    color: var(--text-dim);
-    font-size: 14px;
+.brand-badge {
+    font-size: 10px;
     text-transform: uppercase;
     letter-spacing: 2px;
+    color: var(--primary);
+    background: var(--primary-glow);
+    padding: 3px 8px;
+    border-radius: 4px;
+    margin-bottom: 5px;
     font-weight: 600;
+}
+
+.brand-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    margin: 0;
+    line-height: 1.1;
+    color: white;
+}
+
+.brand-title span {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 300;
+    color: var(--text-dim);
+    display: block;
+    font-size: 22px;
+    margin-top: 2px;
+}
+
+.brand-sub {
+    color: rgba(255,255,255,0.4);
+    font-size: 12px;
+    margin: 5px 0 0 0;
+}
+
+#sync-status {
+    align-self: center;
+    margin-top: 0;
 }
 
 /* Contenido Principal */
