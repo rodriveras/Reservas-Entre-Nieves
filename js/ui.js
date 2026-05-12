@@ -115,11 +115,11 @@ const UI = {
         const pill = document.getElementById('sync-status');
         if (!pill) return;
         if (status === 'live') {
-            pill.innerHTML = `<i class="fas fa-check-circle" style="color:#10b981;"></i> Sincronizado`;
+            pill.innerHTML = `<i class="fas fa-circle" style="color:#10b981; font-size:12px; filter: drop-shadow(0 0 6px rgba(16,185,129,0.8));"></i>`;
         } else if (status === 'offline') {
-            pill.innerHTML = `<i class="fas fa-exclamation-triangle" style="color:#f59e0b;"></i> Modo Cache <span onclick="APP.recalcKPIs()" style="text-decoration:underline; cursor:pointer;">[Reintentar]</span>`;
+            pill.innerHTML = `<i class="fas fa-circle" style="color:#f59e0b; font-size:12px; cursor:pointer;" title="Reintentar Conexión" onclick="APP.recalcKPIs()"></i>`;
         } else {
-            pill.innerHTML = `<i class="fas fa-sync fa-spin"></i> Conectando...`;
+            pill.innerHTML = `<i class="fas fa-circle fa-fade" style="color:#3b82f6; font-size:12px;"></i>`;
         }
     },
 

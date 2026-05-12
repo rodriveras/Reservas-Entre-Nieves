@@ -18,21 +18,14 @@
 </head>
 <body class="admin-theme">
 
-    <!-- Header Branding Premium -->
+    <!-- Marca de agua de fondo -->
+    <div class="watermark-bg"></div>
+
+    <!-- Header Centrado -->
     <header class="main-header">
-        <div class="brand-wrapper">
-            <!-- Logo -->
-            <div class="brand-logo">
-                <img src="Logo.jpeg" alt="Cabañas Entre Nieves" onerror="this.style.display='none'">
-            </div>
-            <!-- Separador vertical -->
-            <div class="brand-divider"></div>
-            <!-- Texto de marca -->
-            <div class="brand-text">
-                <div class="brand-badge">Sistema de Gestión</div>
-                <h1 class="brand-title">Cabañas <span>Entre Nieves</span></h1>
-                <p class="brand-sub">Panel Administrativo Privado</p>
-            </div>
+        <div class="brand-text-centered">
+            <h1 class="brand-title" style="text-align: center;">Cabañas <span>Entre Nieves</span></h1>
+            <p class="brand-sub" style="text-align: center;">Panel Administrativo Privado</p>
         </div>
         <!-- Indicador de sync -->
         <div id="sync-status" class="status-pill"><i class="fas fa-sync fa-spin"></i></div>
@@ -41,30 +34,13 @@
     <main id="main-content">
         <!-- VISTA 1: PORTADA / HOME -->
         <section id="view-home" class="view active">
-            <div class="module-grid">
-                <!-- Tarjeta Administración Interna -->
-                <div class="module-card" onclick="UI.showView('gestion')">
-                    <div class="module-icon">
-                        <i class="fas fa-shield-alt"></i>
-                    </div>
-                    <div class="module-info">
-                        <h3>Administración Interna</h3>
-                        <p>Acceso restringido para el equipo de gestión. Control de reservas, calendarios y huéspedes.</p>
-                    </div>
-                    <button class="btn-enter"><i class="fas fa-sign-in-alt"></i> Entrar al Gestor</button>
-                </div>
-
-                <!-- Tarjeta Estadísticas -->
-                <div class="module-card" onclick="UI.showView('stats')">
-                    <div class="module-icon" style="color: var(--secondary);">
-                        <i class="fas fa-chart-pie"></i>
-                    </div>
-                    <div class="module-info">
-                        <h3>Métricas de Negocio</h3>
-                        <p>Análisis de datos en tiempo real. Visualice ocupación e ingresos para la toma de decisiones.</p>
-                    </div>
-                    <button class="btn-enter" style="background: var(--secondary);"><i class="fas fa-poll"></i> Ver Estadísticas</button>
-                </div>
+            <div style="display: flex; flex-direction: column; gap: 20px; align-items: center; justify-content: center; height: 60vh;">
+                <button class="btn-primary" style="padding: 18px 40px; font-size: 16px; border-radius: 30px; width: 85%; max-width: 320px;" onclick="UI.showView('gestion')">
+                    Gestor de Reservas
+                </button>
+                <button class="btn-primary" style="padding: 18px 40px; font-size: 16px; border-radius: 30px; background: rgba(255,255,255,0.05); color: white; width: 85%; max-width: 320px; border: 1px solid rgba(255,255,255,0.1);" onclick="UI.showView('stats')">
+                    Análisis Estratégico
+                </button>
             </div>
         </section>
 
@@ -115,11 +91,15 @@
             <div class="charts-row-2">
                 <div class="chart-box">
                     <h4><i class="fas fa-home" style="color:var(--primary);"></i> Reservas por Cabaña</h4>
-                    <canvas id="chart-dona" height="220"></canvas>
+                    <div class="chart-container-dona">
+                        <canvas id="chart-dona"></canvas>
+                    </div>
                 </div>
                 <div class="chart-box">
                     <h4><i class="fas fa-tags" style="color:#ec4899;"></i> Canal de Captación</h4>
-                    <canvas id="chart-canal" height="220"></canvas>
+                    <div class="chart-container-dona">
+                        <canvas id="chart-canal"></canvas>
+                    </div>
                 </div>
             </div>
 

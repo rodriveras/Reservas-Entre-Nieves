@@ -21,56 +21,45 @@ body.admin-theme {
 }
 
 /* Header Branding Premium */
+/* Header Centrado */
 .main-header {
     background: transparent;
-    padding: 50px 20px 10px;
+    padding: 60px 20px 20px;
     width: 100%;
     display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
+    justify-content: center;
     position: relative;
     z-index: 10;
 }
 
-.brand-wrapper {
+.brand-text-centered {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 20px;
     pointer-events: none;
 }
 
-.brand-logo img {
-    height: 65px;
-    width: auto;
-    border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-    object-fit: cover;
-    display: block;
-}
-
-.brand-divider {
-    width: 1px;
-    height: 50px;
-    background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.2), transparent);
-}
-
-.brand-text {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
+/* Marca de Agua */
+.watermark-bg {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80vw;
+    max-width: 500px;
+    height: 80vw;
+    max-height: 500px;
+    background-image: url('../Logo.jpeg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    opacity: 0.03; /* Muy tenue */
+    z-index: 0;
+    pointer-events: none;
 }
 
 .brand-badge {
-    font-size: 10px;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    color: var(--primary);
-    background: var(--primary-glow);
-    padding: 3px 8px;
-    border-radius: 4px;
-    margin-bottom: 5px;
-    font-weight: 600;
+    display: none; /* Ocultamos el badge en diseño centrado */
 }
 
 .brand-title {
@@ -97,8 +86,10 @@ body.admin-theme {
 }
 
 #sync-status {
-    align-self: center;
-    margin-top: 0;
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    z-index: 100;
 }
 
 /* Contenido Principal */
@@ -426,6 +417,13 @@ body.admin-theme {
 
 .chart-box {
     padding: 20px;
+}
+
+.chart-container-dona {
+    position: relative;
+    width: 100%;
+    max-width: 200px;
+    margin: 0 auto;
 }
 
 /* Responsivo estadísticas en móvil */
