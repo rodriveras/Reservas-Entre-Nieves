@@ -1,0 +1,164 @@
+/* BASE CSS - ESTRUCTURA PURA */
+:root {
+    --primary: #6366f1;
+    --success: #22c55e;
+    --error: #ef4444;
+    --bg-dark: #0f172a;
+}
+
+* {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    line-height: 1.5;
+}
+
+/* Reset de Vistas */
+.view {
+    display: none;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.view.active {
+    display: block;
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Modales y Overlays (Modo Oscuro) */
+.overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.85);
+    z-index: 2000;
+}
+.overlay.active { display: block; }
+
+.bottom-sheet {
+    position: fixed;
+    bottom: -100%;
+    left: 0; right: 0;
+    background: #111827; /* Azul noche profundo */
+    border-radius: 32px 32px 0 0;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    transition: bottom 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 2500;
+    padding: 25px;
+    max-height: 92vh;
+    overflow-y: auto;
+    color: white;
+    box-shadow: 0 -10px 40px rgba(0,0,0,0.5);
+}
+.bottom-sheet.active { bottom: 0; }
+
+/* El modal de reservas tiene su propio fondo oscuro SOLO cuando está activo */
+#reserva-modal.active::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.70);
+    z-index: -1;
+    pointer-events: none;
+}
+
+.handle {
+    width: 45px; height: 5px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 10px;
+    margin: 0 auto 20px;
+}
+
+/* Tarjetas y Inputs en Modo Oscuro */
+.outline-card {
+    background: rgba(255,255,255,0.03) !important;
+    border: 1px solid rgba(255,255,255,0.1) !important;
+    padding: 20px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+}
+
+.outline-input {
+    width: 100%;
+    padding: 12px 15px;
+    background: rgba(0,0,0,0.2);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    font-size: 15px;
+    color: white !important;
+    outline: none;
+    transition: border-color 0.2s;
+}
+.outline-input:focus { border-color: var(--primary); }
+
+.outline-input::placeholder { color: #64748b; }
+.btn-primary {
+    cursor: pointer;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: 0.2s;
+}
+.btn-primary:active { transform: scale(0.95); }
+
+/* Calendario / Grid de Reservas */
+#cal-grid {
+    user-select: none;
+}
+.cal-day-box {
+    user-select: none;
+}
+
+/* === FORMULARIO DEL MODAL - Garantizar interactividad total === */
+.bottom-sheet input,
+.bottom-sheet select,
+.bottom-sheet textarea,
+.bottom-sheet label,
+.bottom-sheet button {
+    pointer-events: auto !important;
+    user-select: text !important;
+    -webkit-user-select: text !important;
+    touch-action: manipulation !important;
+    cursor: pointer;
+}
+
+.bottom-sheet input[type="text"],
+.bottom-sheet input[type="number"],
+.bottom-sheet input[type="date"],
+.bottom-sheet input[type="tel"],
+.bottom-sheet input[type="email"],
+.bottom-sheet textarea {
+    cursor: text !important;
+    -webkit-user-modify: read-write !important;
+}
+
+.bottom-sheet input[type="checkbox"] {
+    width: 20px !important;
+    height: 20px !important;
+    cursor: pointer !important;
+    accent-color: var(--primary);
+}
+
+/* El reserva-modal debe estar siempre por encima del overlay */
+#reserva-modal {
+    z-index: 3500 !important;
+}
+
+.cabin-tooltip {
+    background: rgba(0,0,0,0.8) !important;
+    color: white !important;
+    border: none !important;
+    padding: 4px 8px !important;
+    border-radius: 4px !important;
+    font-size: 11px !important;
+    font-weight: 800 !important;
+}

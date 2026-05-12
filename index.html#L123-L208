@@ -1,0 +1,81 @@
+    <div id="reserva-modal" class="bottom-sheet" style="z-index: 3000;">
+        <div class="handle"></div>
+        <div id="reserva-modal-content" style="padding: 10px 0;">
+            <div style="display: flex; align-items: center; margin-bottom: 20px; gap: 15px;">
+                <button onclick="UI.closeCabinSheet()" style="background:transparent; border:none; color:#222; font-size: 20px; cursor: pointer; padding: 0;">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h2 style="font-family: 'Outfit'; color: #222; margin: 0;">Gestionar Reserva</h2>
+            </div>
+            
+            <div class="outline-card" style="border-color: #ddd; background: #f9f9f9;">
+                <label style="color: #222; font-size: 14px; font-weight: 800; text-transform: uppercase; margin-bottom:15px; display:block;"><i class="fas fa-bed"></i> Cabaña: <span id="new-res-cabana" style="color:var(--primary);"></span></label>
+                
+                <div class="form-grid" style="margin-bottom: 15px;">
+                    <div>
+                        <label style="color: #666; font-size: 11px; font-weight: 700; text-transform: uppercase;">Entrada</label>
+                        <input type="date" id="new-res-in" class="outline-input" style="margin-top: 5px; color: #222;">
+                    </div>
+                    <div>
+                        <label style="color: #666; font-size: 11px; font-weight: 700; text-transform: uppercase;">Salida</label>
+                        <input type="date" id="new-res-out" class="outline-input" style="margin-top: 5px; color: #222;">
+                    </div>
+                </div>
+
+                <div class="form-grid">
+                    <div>
+                        <label style="color: #666; font-size: 11px; font-weight: 700; text-transform: uppercase;">Pasajeros</label>
+                        <input type="number" id="new-res-pax" class="outline-input" style="margin-top: 5px; font-size:18px; color: #222;" min="1" value="2">
+                    </div>
+                    <div>
+                        <label style="color: #666; font-size: 11px; font-weight: 700; text-transform: uppercase;">Precio Total ($)</label>
+                        <input type="number" id="new-res-precio" class="outline-input" style="margin-top: 5px; font-size:18px; color: #222;" min="0">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Datos del Huésped -->
+            <div class="outline-card" style="border-color: #ddd; background: #f9f9f9;">
+                <label style="color: #222; font-size: 14px; font-weight: 800; text-transform: uppercase; margin-bottom:15px; display:block;"><i class="fas fa-user"></i> Datos del Huésped</label>
+                <input type="text" id="new-res-cliente" class="outline-input" style="margin-bottom: 20px; font-size:18px; border-bottom:1px solid #ddd; padding-bottom:10px; border-radius:0; color: #222;" placeholder="Nombre completo">
+                
+                <div class="form-grid" style="margin-bottom: 12px;">
+                    <input type="tel" id="new-res-cel" class="outline-input" placeholder="Celular">
+                    <input type="text" id="new-res-rrss" class="outline-input" placeholder="Instagram/RRSS">
+                </div>
+                <input type="email" id="new-res-email" class="outline-input" placeholder="Correo electrónico" style="margin-bottom: 15px;">
+                
+                <!-- Extras y Pagos -->
+                <div style="border-top: 1px solid #eee; padding-top: 15px;">
+                    <label style="display:flex; align-items:center; gap:8px; font-size:14px; cursor:pointer; margin-bottom: 15px; color: #444;">
+                        <input type="checkbox" id="new-res-mascota" style="width:18px; height:18px;"> <i class="fas fa-paw" style="color:#888;"></i> Trae Mascota
+                    </label>
+                    <label style="display:flex; align-items:center; gap:8px; font-size:14px; cursor:pointer; margin-bottom: 10px; color: #444;">
+                        <input type="checkbox" id="new-res-tina" style="width:18px; height:18px;" onchange="document.getElementById('tina-price-container').style.display = this.checked ? 'block' : 'none'"> <i class="fas fa-hot-tub" style="color:#888;"></i> Tina Caliente
+                    </label>
+                    <div id="tina-price-container" style="display:none; margin-bottom: 15px;">
+                        <input type="number" id="new-res-tina-precio" class="outline-input" placeholder="Valor Tina ($)">
+                    </div>
+
+                    <div style="margin-top: 15px;">
+                        <label style="color: #666; font-size: 11px; font-weight: 700; text-transform: uppercase;">Abono Pagado ($)</label>
+                        <input type="number" id="new-res-abono" class="outline-input" style="margin-top: 5px; color: #222;" placeholder="0">
+                    </div>
+
+                    <div style="margin-top: 15px;">
+                        <label style="color: #666; font-size: 11px; font-weight: 700; text-transform: uppercase;">Comentarios / Notas</label>
+                        <textarea id="new-res-comentarios" class="outline-input" style="margin-top: 5px; min-height: 80px; resize: none; color: #222;"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px;">
+                <button id="btn-save-res" class="btn-primary" style="background: var(--primary); color:white; height: 50px; border-radius: 15px; font-weight: 800;" onclick="CALENDAR.saveReservation()">
+                    Guardar
+                </button>
+                <button id="btn-delete-res" class="btn-primary" style="background: #fee2e2; color:#ef4444; height: 50px; border-radius: 15px; font-weight: 800; display:none;" onclick="CALENDAR.deleteReservation()">
+                    Eliminar
+                </button>
+            </div>
+        </div>
+    </div>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Reservas | Refugio de Montaña</title>
+    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Outfit:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/base.css">
+</head>
+<body class="client-mode">
+
+    <!-- Header simplificado para clientes -->
+    <header class="main-header client-header">
+        <div class="brand">
+            <h1>Refugio <span>Montaña</span></h1>
+        </div>
+        <div class="controls" style="display: flex; flex-direction: column; align-items: flex-end; gap: 8px;">
+            <div id="sync-status" class="status-pill" style="margin-top: 0;"><i class="fas fa-sync fa-spin"></i></div>
+        </div>
+    </header>
+
+    <!-- El Mapa -->
+    <div id="map"></div>
+
+    <!-- Instrucción Flotante inferior -->
+    <section class="client-instructions" style="bottom: 20px; width: auto; min-width: 280px; pointer-events: none;">
+        <div class="instruction-card" style="padding: 12px 24px; border-radius: 30px; display: flex; align-items: center; justify-content: center; gap: 10px; pointer-events: auto;">
+            <i class="fas fa-hand-pointer" style="color: var(--primary); font-size: 18px; margin: 0;"></i>
+            <p style="font-size: 12px; font-weight: 600; margin: 0;">Toca una cabaña para ver detalles y fechas</p>
+        </div>
+    </section>
+
+    <!-- BottomSheet de Reserva -->
+    <div id="bs-overlay" class="overlay"></div>
+    <div id="cabin-sheet" class="bottom-sheet">
+        <div class="handle"></div>
+        <div class="sheet-content" id="sheet-data">
+            <div class="loading-cabin">
+                <i class="fas fa-circle-notch fa-spin"></i> Cargando...
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="qgis2web_2026_04_29-12_59_38_396271/data/Cabaas_3.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/map_clientes.js"></script>
+    <script src="js/ui_clientes.js"></script>
+    <script src="js/app_clientes.js"></script>
+</body>
+</html>

@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Cabañas Entre Nieves | Panel de Gestión</title>
+    
+    <!-- CSS Externo -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Outfit:wght@300;400;700;900&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    
+    <!-- Librerías de Gráficos -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Nuestro CSS Modular -->
+    <link rel="stylesheet" href="css/base.css?v=2.5">
+    <link rel="stylesheet" href="css/dashboard.css?v=2.5">
+</head>
+<body class="admin-theme">
+
+    <!-- Header Branding Premium -->
+    <header class="main-header">
+        <div class="brand-wrapper">
+            <!-- Logo -->
+            <div class="brand-logo">
+                <img src="Logo.jpeg" alt="Cabañas Entre Nieves" onerror="this.style.display='none'">
+            </div>
+            <!-- Separador vertical -->
+            <div class="brand-divider"></div>
+            <!-- Texto de marca -->
+            <div class="brand-text">
+                <div class="brand-badge">Sistema de Gestión</div>
+                <h1 class="brand-title">Cabañas <span>Entre Nieves</span></h1>
+                <p class="brand-sub">Panel Administrativo Privado</p>
+            </div>
+        </div>
+        <!-- Indicador de sync -->
+        <div id="sync-status" class="status-pill"><i class="fas fa-sync fa-spin"></i></div>
+    </header>
+
+    <main id="main-content">
+        <!-- VISTA 1: PORTADA / HOME -->
+        <section id="view-home" class="view active">
+            <div class="module-grid">
+                <!-- Tarjeta Administración Interna -->
+                <div class="module-card" onclick="UI.showView('gestion')">
+                    <div class="module-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <div class="module-info">
+                        <h3>Administración Interna</h3>
+                        <p>Acceso restringido para el equipo de gestión. Control de reservas, calendarios y huéspedes.</p>
+                    </div>
+                    <button class="btn-enter"><i class="fas fa-sign-in-alt"></i> Entrar al Gestor</button>
+                </div>
+
+                <!-- Tarjeta Estadísticas -->
+                <div class="module-card" onclick="UI.showView('stats')">
+                    <div class="module-icon" style="color: var(--secondary);">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                    <div class="module-info">
+                        <h3>Métricas de Negocio</h3>
+                        <p>Análisis de datos en tiempo real. Visualice ocupación e ingresos para la toma de decisiones.</p>
+                    </div>
+                    <button class="btn-enter" style="background: var(--secondary);"><i class="fas fa-poll"></i> Ver Estadísticas</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- VISTA 2: GESTIÓN (LISTA DE CABAÑAS Y PANORAMA) -->
+        <section id="view-gestion" class="view">
+            <div class="view-header">
+                <button class="back-btn" onclick="UI.backToModules()"><i class="fas fa-arrow-left"></i> Volver</button>
+                <h2 id="gestion-title" style="font-family:'Outfit'; color: white;">Seleccione Cabaña</h2>
+            </div>
+            
+            <!-- Sub-vista 1: Grilla de Cabañas -->
+            <div id="cabanas-list-container" class="module-grid" style="margin-top: 0;">
+                <!-- Se poblará dinámicamente con UI.renderCabinList() -->
+            </div>
+
+            <!-- Sub-vista 2: Panorama (Oculto por defecto) -->
+            <div id="calendar-content" style="display: none;"></div>
+        </section>
+
+        <!-- VISTA 3: ESTADÍSTICAS -->
+        <section id="view-stats" class="view">
+            <div class="view-header">
+                <button class="back-btn" onclick="UI.showView('home')"><i class="fas fa-arrow-left"></i> Volver</button>
+                <h2 style="font-family:'Outfit'; color: white;">Análisis Estratégico</h2>
+            </div>
+
+            <!-- KPI Cards -->
+            <div class="stats-grid kpi-grid">
+                <div class="stat-mini-card" style="border-left: 3px solid #6366f1;">
+                    <span class="lab"><i class="fas fa-dollar-sign" style="color:#6366f1;"></i> Ingresos Proyectados</span>
+                    <span class="val" id="kpi-ingresos" style="color:#6366f1;">$ 0</span>
+                </div>
+                <div class="stat-mini-card" style="border-left: 3px solid #f59e0b;">
+                    <span class="lab"><i class="fas fa-clock" style="color:#f59e0b;"></i> Saldo por Cobrar</span>
+                    <span class="val" id="kpi-saldo" style="color:#f59e0b;">$ 0</span>
+                </div>
+                <div class="stat-mini-card" style="border-left: 3px solid #10b981;">
+                    <span class="lab"><i class="fas fa-moon" style="color:#10b981;"></i> Estadía Promedio</span>
+                    <span class="val" id="kpi-estadia" style="color:#10b981;">0 noches</span>
+                </div>
+                <div class="stat-mini-card" style="border-left: 3px solid #a855f7;">
+                    <span class="lab"><i class="fas fa-calendar-check" style="color:#a855f7;"></i> Reservas Totales</span>
+                    <span class="val" id="kpi-total-res" style="color:#a855f7;">0</span>
+                </div>
+            </div>
+
+            <!-- Gráficos fila 1: Dona + Canal -->
+            <div class="charts-row-2">
+                <div class="chart-box">
+                    <h4><i class="fas fa-home" style="color:var(--primary);"></i> Reservas por Cabaña</h4>
+                    <canvas id="chart-dona" height="220"></canvas>
+                </div>
+                <div class="chart-box">
+                    <h4><i class="fas fa-tags" style="color:#ec4899;"></i> Canal de Captación</h4>
+                    <canvas id="chart-canal" height="220"></canvas>
+                </div>
+            </div>
+
+            <!-- Gráfico fila 2: Ingresos por mes (ancho completo) -->
+            <div class="chart-box stats-full">
+                <h4><i class="fas fa-chart-bar" style="color:#10b981;"></i> Ingresos Proyectados por Mes (CLP)</h4>
+                <canvas id="chart-barras" height="140"></canvas>
+            </div>
+
+            <!-- Próximas llegadas -->
+            <div class="chart-box stats-full">
+                <h4><i class="fas fa-plane-arrival" style="color:#f59e0b;"></i> Próximas Llegadas</h4>
+                <div id="proximas-llegadas" style="display:flex; flex-direction:column; gap:8px; margin-top:10px;"></div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modales -->
+    <div id="bs-overlay" class="overlay"></div>
+    <div id="cabin-sheet" class="bottom-sheet">
+        <div class="handle"></div>
+        <div class="sheet-content" id="sheet-data"></div>
+    </div>
+    <style>
+        /* 🚀 OVERRIDES DE ALTA PRIORIDAD */
+        .cal-day-box:active { transform: scale(0.92); transition: 0.1s; }
+        
+        .outline-card { 
+            padding: 10px !important; 
+            margin-bottom: 10px !important; 
+            border-radius: 12px !important;
+            background: rgba(255,255,255,0.04) !important;
+        }
+        .outline-input { 
+            padding: 8px 12px !important; 
+            font-size: 14px !important;
+            border-radius: 8px !important;
+            min-height: 36px !important;
+            box-sizing: border-box !important;
+            -webkit-user-select: text !important;
+            user-select: text !important;
+            pointer-events: auto !important;
+        }
+        .form-grid { gap: 8px !important; margin-bottom: 8px !important; }
+        .field-label { font-size: 10px !important; margin-bottom: 2px !important; }
+        #btn-save-res, #btn-delete-res { 
+            height: 36px !important; 
+            font-size: 13px !important; 
+            border-radius: 10px !important;
+        }
+        /* Toggle activo */
+        .toggle-on {
+            background: rgba(99, 102, 241, 0.25) !important;
+            border-color: #6366f1 !important;
+            color: #a5b4fc !important;
+        }
+    </style>
+    <script>
+        function toggleExtra(type) {
+            const cb = document.getElementById('new-res-' + type);
+            const btn = document.getElementById('toggle-' + type);
+            if (!cb || !btn) return;
+            cb.checked = !cb.checked;
+            btn.classList.toggle('toggle-on', cb.checked);
+        }
+        function setToggle(type, value) {
+            const cb = document.getElementById('new-res-' + type);
+            const btn = document.getElementById('toggle-' + type);
+            if (!cb || !btn) return;
+            cb.checked = value;
+            if (value) btn.classList.add('toggle-on');
+            else btn.classList.remove('toggle-on');
+        }
+    </script>
+
+    <div id="reserva-modal" class="bottom-sheet" style="z-index: 4000;">
+        <div class="handle"></div>
+        <div id="reserva-modal-content" style="padding: 10px 0;">
+            <input type="hidden" id="new-res-id">
+            <input type="hidden" id="new-res-cabana-id">
+            
+            <!-- Cabecera del Modal -->
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; padding: 0 5px;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <button onclick="UI.closeCabinSheet()" style="background:rgba(255,255,255,0.05); border:none; color:white; width:36px; height:36px; border-radius:10px; display:flex; align-items:center; justify-content:center; cursor: pointer;" title="Cerrar">
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <button onclick="UI.goToHomeFromModal()" style="background:rgba(255,255,255,0.05); border:none; color:var(--primary); width:36px; height:36px; border-radius:10px; display:flex; align-items:center; justify-content:center; cursor: pointer;" title="Ir al Inicio">
+                        <i class="fas fa-home"></i>
+                    </button>
+                    <div>
+                        <h2 id="modal-res-title" style="font-family: 'Outfit'; color: white; margin: 0; font-size: 18px;">Gestionar Reserva</h2>
+                        <span id="new-res-cabana-nombre" style="color:var(--primary); font-size: 12px; font-weight: 700; text-transform: uppercase;">Cabaña</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Sección 1: Estancia -->
+            <div class="outline-card">
+                <span class="form-section-title"><i class="fas fa-calendar-alt"></i> Estancia</span>
+                
+                <div class="form-grid">
+                    <div class="field-group">
+                        <span class="field-label">Entrada</span>
+                        <input type="date" id="new-res-entrada" class="outline-input">
+                    </div>
+                    <div class="field-group">
+                        <span class="field-label">Salida</span>
+                        <input type="date" id="new-res-salida" class="outline-input">
+                    </div>
+                </div>
+
+                <div class="form-grid" style="margin-bottom: 0;">
+                    <div class="field-group">
+                        <span class="field-label">Pasajeros</span>
+                        <input type="text" id="new-res-pax" class="outline-input" inputmode="numeric" pattern="[0-9]*" placeholder="2">
+                    </div>
+                    <div class="field-group">
+                        <span class="field-label">Precio ($)</span>
+                        <input type="text" id="new-res-precio-total" class="outline-input" inputmode="numeric" pattern="[0-9]*" placeholder="0">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sección 2: Huésped -->
+            <div class="outline-card">
+                <span class="form-section-title"><i class="fas fa-user"></i> Huésped</span>
+                
+                <div class="field-group" style="margin-bottom: 10px;">
+                    <span class="field-label">Nombre</span>
+                    <input type="text" id="new-res-cliente" class="outline-input" placeholder="Juan Pérez">
+                </div>
+                
+                <div class="form-grid">
+                    <div class="field-group">
+                        <span class="field-label">Celular</span>
+                        <input type="tel" id="new-res-celular" class="outline-input" placeholder="+569...">
+                    </div>
+                    <div class="field-group">
+                        <span class="field-label">Email</span>
+                        <input type="email" id="new-res-email" class="outline-input" placeholder="correo@...">
+                    </div>
+                </div>
+                <div class="field-group" style="margin-top:8px;">
+                    <span class="field-label">Redes Sociales</span>
+                    <input type="text" id="new-res-rrss" class="outline-input" placeholder="@instagram">
+                </div>
+            </div>
+
+            <!-- Sección 3: Extras y Pagos -->
+            <div class="outline-card">
+                <span class="form-section-title"><i class="fas fa-plus-circle"></i> Extras y Pagos</span>
+                
+                <!-- Toggles táctiles grandes (reemplazan checkboxes pequeños) -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px;">
+                    <div id="toggle-mascota" onclick="toggleExtra('mascota')"
+                         style="display:flex; align-items:center; justify-content:center; gap:8px; font-size:13px; font-weight:700; cursor:pointer; color:white; background:rgba(0,0,0,0.2); padding:14px 8px; border-radius:12px; border:2px solid rgba(255,255,255,0.08); transition:all 0.2s; -webkit-tap-highlight-color:transparent;">
+                        <i class="fas fa-paw" style="font-size:16px;"></i> Mascota
+                    </div>
+                    <div id="toggle-tina" onclick="toggleExtra('tina')"
+                         style="display:flex; align-items:center; justify-content:center; gap:8px; font-size:13px; font-weight:700; cursor:pointer; color:white; background:rgba(0,0,0,0.2); padding:14px 8px; border-radius:12px; border:2px solid rgba(255,255,255,0.08); transition:all 0.2s; -webkit-tap-highlight-color:transparent;">
+                        <i class="fas fa-hot-tub" style="font-size:16px;"></i> Tina
+                    </div>
+                </div>
+                <!-- Checkboxes ocultos (se leen en JS con el mismo ID) -->
+                <input type="checkbox" id="new-res-mascota" style="display:none;">
+                <input type="checkbox" id="new-res-tina" style="display:none;">
+
+                <!-- Precio Tina siempre visible -->
+                <div class="field-group" style="margin-bottom: 10px;">
+                    <span class="field-label">Precio Tina ($)</span>
+                    <input type="text" id="new-res-tina-valor" class="outline-input" inputmode="numeric" pattern="[0-9]*" placeholder="0">
+                </div>
+
+                <div class="field-group" style="margin-bottom: 15px;">
+                    <span class="field-label">Abono Adelantado ($)</span>
+                    <input type="text" id="new-res-abono" class="outline-input" inputmode="numeric" pattern="[0-9]*" placeholder="0">
+                </div>
+
+                <div class="field-group">
+                    <span class="field-label">Notas / Observaciones</span>
+                    <textarea id="new-res-notas" class="outline-input" style="min-height: 80px; resize: none;"></textarea>
+                </div>
+            </div>
+
+            <!-- Botones de Acción (Miniaturizados) -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 5px; padding-bottom: 15px;">
+                <button id="btn-delete-res" class="btn-primary" style="background: rgba(239, 68, 68, 0.08); color:#ef4444; height: 36px; border-radius: 10px; font-weight: 700; font-size: 13px; border: 1px solid rgba(239, 68, 68, 0.15); display:none;" onclick="CALENDAR.deleteReservation()">
+                    <i class="fas fa-trash-alt" style="font-size:11px;"></i> Eliminar
+                </button>
+                <button id="btn-save-res" class="btn-primary" style="background: linear-gradient(135deg, #6366f1, #4f46e5); color:white; height: 36px; border-radius: 10px; font-weight: 700; font-size: 13px; border:none; grid-column: span 2;" onclick="CALENDAR.saveReservation()">
+                    <i class="fas fa-save" style="font-size:11px;"></i> Guardar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JS Modular -->
+    <script src="js/config.js?v=2.5"></script>
+    <script src="js/api.js?v=2.5"></script>
+    <script src="js/calendar.js?v=2.5"></script>
+    <script src="js/ui.js?v=2.5"></script>
+    <script src="js/app.js?v=2.5"></script>
+</body>
+</html>
