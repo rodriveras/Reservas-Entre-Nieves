@@ -201,7 +201,7 @@ const CALENDAR = {
         
         // Pasajeros - busca todas las variantes posibles
         const paxVal = res ? getField(res, 'Pasajeros', 'pasajeros', 'pax', 'PAX', 'Pax') : '';
-        safeSet('new-res-pax', paxVal || '1');
+        safeSet('new-res-pax', paxVal || '');
         
         // Precio - busca todas las variantes posibles
         const precioVal = res ? getField(res, 'precios_dinamicos', 'precio_total', 'Precio', 'precio', 'Precio_total') : '';
