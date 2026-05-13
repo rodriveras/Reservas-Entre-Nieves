@@ -233,18 +233,20 @@ const UI = {
                 type: 'doughnut',
                 data: {
                     labels: cabNames,
-                    datasets: [{ data: cabCount, backgroundColor: cabColors, borderWidth: 2, borderColor: '#111827' }]
+                    datasets: [{ data: cabCount, backgroundColor: cabColors, borderWidth: 0 }]
                 },
                 options: {
                     responsive: true,
+                    cutout: '65%',
+                    layout: { padding: 10 },
                     plugins: {
                         legend: { display: false }, // Ocultar leyenda para ahorrar espacio
                         tooltip: { callbacks: { label: ctx => ` ${ctx.label}: ${ctx.raw} reservas` } },
                         datalabels: {
                             color: '#ffffff',
-                            font: { size: 10, weight: 'bold' },
+                            font: { size: 9, weight: 'bold' },
                             formatter: (value, ctx) => {
-                                let label = ctx.chart.data.labels[ctx.dataIndex];
+                                let label = ctx.chart.data.labels[ctx.dataIndex].replace(/Cabaña\s*/i, '');
                                 return value > 0 ? `${label}\n${value}` : '';
                             },
                             textAlign: 'center'
@@ -262,16 +264,18 @@ const UI = {
                 type: 'doughnut',
                 data: {
                     labels: ['Airbnb', 'Directo'],
-                    datasets: [{ data: [airbnb, directo], backgroundColor: ['#ec4899', '#6366f1'], borderWidth: 2, borderColor: '#111827' }]
+                    datasets: [{ data: [airbnb, directo], backgroundColor: ['#ec4899', '#6366f1'], borderWidth: 0 }]
                 },
                 options: {
                     responsive: true,
+                    cutout: '65%',
+                    layout: { padding: 10 },
                     plugins: {
                         legend: { display: false },
                         tooltip: { callbacks: { label: ctx => ` ${ctx.label}: ${ctx.raw} reservas` } },
                         datalabels: {
                             color: '#ffffff',
-                            font: { size: 10, weight: 'bold' },
+                            font: { size: 9, weight: 'bold' },
                             formatter: (value, ctx) => {
                                 let label = ctx.chart.data.labels[ctx.dataIndex];
                                 return value > 0 ? `${label}\n${value}` : '';
@@ -287,6 +291,12 @@ const UI = {
         const ctxBar = document.getElementById('chart-barras');
         if (ctxBar) {
             if (this.barChart) this.barChart.destroy();
+            
+            // Crear gradiente para barras
+            const gradient = ctxBar.getContext('2d').createLinearGradient(0, 0, 0, 140);
+            gradient.addColorStop(0, '#6366f1'); // Primary color
+            gradient.addColorStop(1, 'rgba(99,102,241,0.2)');
+
             this.barChart = new Chart(ctxBar, {
                 type: 'bar',
                 data: {
@@ -294,17 +304,32 @@ const UI = {
                     datasets: [{
                         label: 'Ingresos CLP',
                         data: mesData,
-                        backgroundColor: 'rgba(99,102,241,0.7)',
-                        borderRadius: 8,
-                        borderSkipped: false
+                        backgroundColor: gradient,
+                        borderRadius: 4,
+                        barPercentage: 0.6
                     }]
                 },
                 options: {
                     responsive: true,
-                    plugins: { legend: { display: false } },
+                    plugins: { 
+                        legend: { display: false },
+                        datalabels: { display: false } // No mostrar etiquetas dentro de barras
+                    },
                     scales: {
-                        x: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(255,255,255,0.05)' } },
-                        y: { ticks: { color: '#94a3b8', callback: v => '$ ' + (v/1000).toFixed(0) + 'k' }, grid: { color: 'rgba(255,255,255,0.05)' } }
+                        x: { ticks: { color: '#94a3b8', font: { size: 10 } }, grid: { display: false } },
+                        y: { 
+                            beginAtZero: true,
+                            ticks: { 
+                                color: '#94a3b8',
+                                font: { size: 10 },
+                                callback: v => {
+                                    if (v >= 1000000) return '$' + (v/1000000).toFixed(1) + 'M';
+                                    if (v >= 1000) return '$' + (v/1000).toFixed(0) + 'k';
+                                    return '$' + v;
+                                }
+                            }, 
+                            grid: { color: 'rgba(255,255,255,0.05)', borderDash: [5, 5] } 
+                        }
                     }
                 }
             });
@@ -325,19 +350,19 @@ const UI = {
             } else {
                 container.innerHTML = proximas.map(r => {
                     const cab = cabanas.find(c => c.id == r.id_cabana);
-                    const cabNombre = cab ? cab.nombre : `Cabaña ${r.id_cabana}`;
+                    const cabNombre = cab ? cab.nombre.replace(/Cabaña\s*/i, '') : `${r.id_cabana}`;
                     const fecha = new Date(r.fecha_entrada).toLocaleDateString('es-CL', { day:'numeric', month:'short' });
                     const nights = Math.round((new Date(r.fecha_salida) - new Date(r.fecha_entrada)) / 86400000);
                     const precio = fmtCLP(parseCLPAmt(r.precios_dinamicos));
                     return `
-                        <div style="display:flex; align-items:center; justify-content:space-between; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.07); border-radius:12px; padding:10px 14px;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid rgba(255,255,255,0.05);">
                             <div>
-                                <div style="font-weight:700; font-size:14px; color:white;">${r.cliente}</div>
-                                <div style="font-size:11px; color:#94a3b8; margin-top:2px;"><i class="fas fa-home"></i> ${cabNombre} &nbsp;·&nbsp; <i class="fas fa-moon"></i> ${nights} noches</div>
+                                <div style="font-weight:600; font-size:13px; color:white;">${r.cliente}</div>
+                                <div style="font-size:11px; color:#94a3b8; margin-top:2px;">${cabNombre} • ${nights}n</div>
                             </div>
                             <div style="text-align:right;">
-                                <div style="font-size:13px; font-weight:700; color:#6366f1;">${precio}</div>
-                                <div style="font-size:11px; color:#f59e0b; margin-top:2px;"><i class="fas fa-calendar"></i> ${fecha}</div>
+                                <div style="font-weight:600; font-size:13px; color:#10b981;">${precio}</div>
+                                <div style="font-size:11px; color:#94a3b8; margin-top:2px;">${fecha}</div>
                             </div>
                         </div>`;
                 }).join('');
