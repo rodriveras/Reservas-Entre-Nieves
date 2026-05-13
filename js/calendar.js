@@ -10,7 +10,7 @@ function formatCLP(value) {
 }
 function parseCLP(str) {
     // Elimina $, espacios y puntos de miles → número limpio
-    return String(str).replace(/[^0-9]/g, '') || '0';
+    return String(str).replace(/[^0-9]/g, '');
 }
 function attachCLPFormat(id) {
     const el = document.getElementById(id);
