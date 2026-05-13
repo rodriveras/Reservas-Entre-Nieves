@@ -9,6 +9,11 @@ const UI = {
     // 🎯 Función de inicialización (Faltaba y causaba error)
     init() {
         console.log("🖥️ UI Inicializada");
+        // Registrar plugin de datalabels si está disponible
+        if (typeof ChartDataLabels !== 'undefined') {
+            Chart.register(ChartDataLabels);
+        }
+        
         // Asegurar que el overlay esté cerrado al inicio
         const overlay = document.getElementById('bs-overlay');
         if (overlay) overlay.classList.remove('active');
@@ -233,8 +238,17 @@ const UI = {
                 options: {
                     responsive: true,
                     plugins: {
-                        legend: { position: 'bottom', labels: { color: '#94a3b8', font: { size: 11 } } },
-                        tooltip: { callbacks: { label: ctx => ` ${ctx.label}: ${ctx.raw} reservas` } }
+                        legend: { display: false }, // Ocultar leyenda para ahorrar espacio
+                        tooltip: { callbacks: { label: ctx => ` ${ctx.label}: ${ctx.raw} reservas` } },
+                        datalabels: {
+                            color: '#ffffff',
+                            font: { size: 10, weight: 'bold' },
+                            formatter: (value, ctx) => {
+                                let label = ctx.chart.data.labels[ctx.dataIndex];
+                                return value > 0 ? `${label}\n${value}` : '';
+                            },
+                            textAlign: 'center'
+                        }
                     }
                 }
             });
@@ -253,8 +267,17 @@ const UI = {
                 options: {
                     responsive: true,
                     plugins: {
-                        legend: { position: 'bottom', labels: { color: '#94a3b8', font: { size: 11 } } },
-                        tooltip: { callbacks: { label: ctx => ` ${ctx.label}: ${ctx.raw} reservas` } }
+                        legend: { display: false },
+                        tooltip: { callbacks: { label: ctx => ` ${ctx.label}: ${ctx.raw} reservas` } },
+                        datalabels: {
+                            color: '#ffffff',
+                            font: { size: 10, weight: 'bold' },
+                            formatter: (value, ctx) => {
+                                let label = ctx.chart.data.labels[ctx.dataIndex];
+                                return value > 0 ? `${label}\n${value}` : '';
+                            },
+                            textAlign: 'center'
+                        }
                     }
                 }
             });
